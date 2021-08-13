@@ -13,6 +13,9 @@ app.use('/api/post', require('./routes/api/post'));
 // conncting the database
 connectDB();
 
+// init Middleware
+app.use(express.json({ extended: false }));
+
 const PORT = process.env.PORT || 5000; // This will default to 5000
 
 app.listen(PORT, () => console.log(`Server has staterd on port: ${PORT}`));
