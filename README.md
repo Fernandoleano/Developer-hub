@@ -4,4 +4,4 @@ This is developer hub application it's not done yet I'm on the API part of it an
 
 What is being used for this project?
 
-Javascript, React, Node, Express, mongoose, express, json, react, redux, html, css, post man for the API,
+Javascript, React, Node, Express, mongoose, express, json, react, redux, html, css, post man for the API!
