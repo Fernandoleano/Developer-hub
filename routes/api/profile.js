@@ -98,7 +98,7 @@ router.post('/', [ auth, [
             }
 
             // create user profile
-            await Profile.save();
+            await profile.save();
             res.json(profile);
 
         } catch (err) {
@@ -106,5 +106,60 @@ router.post('/', [ auth, [
             res.status(500).send('Server Error' + err.message);
         }
 });
+
+/*
+    @route GET API/profile
+    @desc get all profiles
+    @access Public
+*/
+router.get('/', async(req, res) => {
+    try {
+        const profiles = await Profile.find().populate('user', ['name', 'avatar',]);
+        res.json(profiles);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error' + err.message);        
+    }
+});
+
+/*
+    @route GET API/profile/user/:user_id
+    @desc get all profiles by user ID
+    @access Public
+*/
+router.get('/user/:user_id', async(req, res) => {
+    try {
+        const profile = await Profile.findOne({ user: req.params.user_id }).populate('user', ['name', 'avatar',]);
+        if (!profile) return res.status(400).json({ msg: 'User does not exists.' });
+        res.json(profile);
+    } catch (err) {
+        console.error(err.message);
+        if (err.kind == 'ObjectId') {
+            return res.status(400).json({ msg: 'User does not exists.' });
+        }
+        res.status(500).send('Server Error' + err.message);        
+    }
+});
+
+/*
+    @route DELETE API/profile
+    @desc Delete profiles, user & posts
+    @access Priate
+*/
+router.delete('/', auth, async(req, res) => {
+    try {
+        // remove profile
+        await Profile.findOneAndRemove({ user: req.user.id });
+        await User.findOneAndRemove({ _id: req.user.id });
+        res.json({ msg: "User deleted" });
+    } catch (err) {
+        console.error(err.message);
+        if (err.kind == 'ObjectId') {
+            return res.status(400).json({ msg: 'User does not exists.' });
+        }
+        res.status(500).send('Server Error' + err.message);        
+    }
+});
+
 
 module.exports = router;
