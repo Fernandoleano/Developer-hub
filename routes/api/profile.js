@@ -1,5 +1,5 @@
 const express = require('express');
-const request = express.request('request');
+const request = require('request');
 const config = require('config');
 const router = express.Router();
 const auth = require('../../middleware/auth');
@@ -9,8 +9,8 @@ const Profile = require('../../models/Profile');
 const User = require('../../models/User');
 
 /* 
-    @route GET API/profile/me
-    @desc testing the route
+    @route  GET API/profile/me
+    @desc   testing the route
     @access private
 */
 
@@ -30,8 +30,8 @@ router.get('/me', auth, async (req, res) => {
 });
 
 /* 
-    @route POST API/profile
-    @desc Create/update a user profile
+    @route  POST API/profile
+    @desc   Create/update a user profile
     @access private
 */
 router.post('/', [ auth, [
@@ -110,8 +110,8 @@ router.post('/', [ auth, [
 });
 
 /*
-    @route GET API/profile
-    @desc get all profiles
+    @route  GET API/profile
+    @desc   get all profiles
     @access Public
 */
 router.get('/', async(req, res) => {
@@ -125,8 +125,8 @@ router.get('/', async(req, res) => {
 });
 
 /*
-    @route GET API/profile/user/:user_id
-    @desc get all profiles by user ID
+    @route  GET API/profile/user/:user_id
+    @desc   get all profiles by user ID
     @access Public
 */
 router.get('/user/:user_id', async(req, res) => {
@@ -144,8 +144,8 @@ router.get('/user/:user_id', async(req, res) => {
 });
 
 /*
-    @route DELETE API/profile
-    @desc Delete profiles, user & posts
+    @route  DELETE API/profile
+    @desc   Delete profiles, user & posts
     @access Private
 */
 router.delete('/', auth, async(req, res) => {
@@ -164,8 +164,8 @@ router.delete('/', auth, async(req, res) => {
 });
 
 /*
-    @route PUT API/profile/experience
-    @desc Add profile experience
+    @route  PUT API/profile/experience
+    @desc   Add profile experience
     @access Private
 */
 router.put("/experience", [auth,  [
@@ -217,8 +217,8 @@ router.put("/experience", [auth,  [
 });
 
 /*
-    @route DELETE API/profile/experience/:edu_id
-    @desc Delete experience from profile
+    @route  DELETE API/profile/experience/:edu_id
+    @desc   Delete experience from profile
     @access Private
 */
 router.delete('/experience/:edu_id', auth, async (req, res) => {
@@ -237,8 +237,8 @@ router.delete('/experience/:edu_id', auth, async (req, res) => {
 
 
 /*
-    @route PUT API/profile/education
-    @desc Add profile education
+    @route  PUT API/profile/education
+    @desc   Add profile education
     @access Private
 */
 router.put("/education", [auth,  [
@@ -293,8 +293,8 @@ router.put("/education", [auth,  [
 });
 
 /*
-    @route DELETE API/profile/education/:exp_id
-    @desc Delete education from profile
+    @route  DELETE API/profile/education/:exp_id
+    @desc   Delete education from profile
     @access Private
 */
 router.delete('/education/:exp_id', auth, async (req, res) => {
@@ -312,11 +312,11 @@ router.delete('/education/:exp_id', auth, async (req, res) => {
 });
 
 /*
-    @route GET API/profile/github/:username
-    @desc Get user repos from GitHub
+    @route  GET API/profile/github/:username
+    @desc   Get user repos from GitHub
     @access Public
 */
-router.get('/github/:username', (req, res => {
+router.get('/github/:username', (req, res) => {
     try {
         const options = {
             uri: `https://api.github.com/users/${req.params.username}/repos?per_page=5&sort=created:asc&client_id=${config.get("githubClientId")}&client_secret=${config.get("githubClientSecret")}`,
@@ -324,7 +324,7 @@ router.get('/github/:username', (req, res => {
             headers: { 'users-agent': 'node.js' }
         };
 
-        request(options, (error, response, body) => {
+        request(options, (error, reponse, body) => {
             if (error) console.error(error);
 
             if (reponse.statusCode !== 200){
@@ -337,6 +337,6 @@ router.get('/github/:username', (req, res => {
         console.error(err.message);
         res.status(500).send("Server Error: " + err.message);
     }
-}))
+});
 
 module.exports = router;
